@@ -1,3 +1,5 @@
+  "use strict";
+
 /**
  * @license
  * (c) 2009-2016 Michael Leibman
@@ -16,25 +18,7 @@
  *     and do proper cleanup.
  */
 
-// make sure required JavaScript modules are loaded
-if (typeof jQuery === "undefined") {
-  throw new Error("SlickGrid requires jquery module to be loaded");
-}
-if (!jQuery.fn.drag) {
-  throw new Error("SlickGrid requires jquery.event.drag module to be loaded");
-}
-if (typeof Slick === "undefined") {
-  throw new Error("slick.core.js not loaded");
-}
-
-
-(function ($) {
-  // Slick.Grid
-  $.extend(true, window, {
-    Slick: {
-      Grid: SlickGrid
-    }
-  });
+  var Slick = require("./slick.core");
 
   // shared across all grids on the page
   var scrollbarDimensions;
@@ -53,6 +37,14 @@ if (typeof Slick === "undefined") {
    * @param {Object}            options     Grid options.
    **/
   function SlickGrid(container, data, columns, options) {
+    if (!jQuery.fn.drag) {
+      require('./lib/jquery.event.drag-2.3.0');
+    }
+
+    if (!jQuery.fn.drop) {
+      require('./lib/jquery.event.drop-2.3.0');
+    }
+
     // settings
     var defaults = {
       explicitInitialization: false,
@@ -149,7 +141,7 @@ if (typeof Slick === "undefined") {
         cellWidthDiff = 0, cellHeightDiff = 0, jQueryNewWidthBehaviour = false;
     var absoluteColumnMinWidth;
     var sortIndicatorCssClass = "slick-sort-indicator";
-    
+
     var tabbingDirection = 1;
     var activePosX;
     var activeRow, activeCell;
@@ -181,7 +173,7 @@ if (typeof Slick === "undefined") {
 
     var pagingActive = false;
     var pagingIsLastPage = false;
-    
+
     // async call handles
     var h_editorLoader = null;
     var h_render = null;
@@ -213,10 +205,10 @@ if (typeof Slick === "undefined") {
     // Initialization
 
     function init() {
-      if (container instanceof jQuery) { 
-        $container = container; 
-      } else { 
-        $container = $(container); 
+      if (container instanceof jQuery) {
+        $container = container;
+      } else {
+        $container = $(container);
       }
       if ($container.length < 1) {
         throw new Error("SlickGrid requires a valid container, " + container + " does not exist in the DOM.");
@@ -768,7 +760,7 @@ if (typeof Slick === "undefined") {
         }
       }
     }
-    
+
     function setupColumnSort() {
       $headers.click(function (e) {
         // temporary workaround for a bug in jQuery 1.7.1 (http://bugs.jquery.com/ticket/11328)
@@ -799,10 +791,10 @@ if (typeof Slick === "undefined") {
             }
           }
           var hadSortCol = !!sortColumn;
-          
+
           if (options.tristateMultiColumnSort) {
-              if (!sortColumn) { 
-                sortColumn = { columnId: column.id, sortAsc: column.defaultSortAsc }; 
+              if (!sortColumn) {
+                sortColumn = { columnId: column.id, sortAsc: column.defaultSortAsc };
               }
               if (hadSortCol && sortColumn.sortAsc) {
                 // three state: remove sort rather than go back to ASC
@@ -810,8 +802,8 @@ if (typeof Slick === "undefined") {
                 sortColumn = null;
               }
               if (!options.multiColumnSort) { sortColumns = []; }
-              if (sortColumn && (!hadSortCol || !options.multiColumnSort)) { 
-                sortColumns.push(sortColumn); 
+              if (sortColumn && (!hadSortCol || !options.multiColumnSort)) {
+                sortColumns.push(sortColumn);
               }
           } else {
               // legacy behaviour
@@ -831,12 +823,12 @@ if (typeof Slick === "undefined") {
                 } else if (sortColumns.length == 0) {
                   sortColumns.push(sortColumn);
                 }
-              }              
+              }
           }
-          
+
           setSortColumns(sortColumns);
 
-          if (sortColumns.length > 0) { 
+          if (sortColumns.length > 0) {
               if (!options.multiColumnSort) {
                 trigger(self.onSort, {
                   multiColumnSort: false,
@@ -1705,18 +1697,18 @@ if (typeof Slick === "undefined") {
       var value = null;
       if (item) { value = getDataItemValueForColumn(item, m); }
       var formatterResult =  getFormatter(row, m)(row, cell, value, m, item);
-      
+
       // get addl css class names from object type formatter return and from string type return of onBeforeAppendCell
       var addlCssClasses = trigger(self.onBeforeAppendCell, { row: row, cell: cell, grid: self, value: value, dataContext: item }) || '';
       addlCssClasses += (formatterResult.addClasses ? (addlCssClasses ? ' ' : '') + formatterResult.addClasses : '');
-      
+
       stringArray.push("<div class='" + cellCss + (addlCssClasses ? ' ' + addlCssClasses : '') + "'>");
 
       // if there is a corresponding row (if not, this is the Add New row or this data hasn't been loaded yet)
       if (item) {
         stringArray.push(typeof formatterResult !== 'object' ? formatterResult : formatterResult.text);
       }
-      
+
       stringArray.push("</div>");
 
       rowsCache[row].cellRenderQueue.push(cell);
@@ -1833,16 +1825,16 @@ if (typeof Slick === "undefined") {
     }
 
     function applyFormatResultToCellNode(formatterResult, cellNode, suppressRemove) {
-        if (typeof formatterResult !== 'object') { 
+        if (typeof formatterResult !== 'object') {
             cellNode.innerHTML = formatterResult;
             return;
         }
         cellNode.innerHTML = formatterResult.text;
-        if (formatterResult.removeClasses && !suppressRemove) { 
-            cellNode.removeClass(formatterResult.removeClasses); 
+        if (formatterResult.removeClasses && !suppressRemove) {
+            cellNode.removeClass(formatterResult.removeClasses);
         }
-        if (formatterResult.addClasses) { 
-            cellNode.addClass(formatterResult.addClasses); 
+        if (formatterResult.addClasses) {
+            cellNode.addClass(formatterResult.addClasses);
         }
     }
 
@@ -1871,7 +1863,7 @@ if (typeof Slick === "undefined") {
       ensureCellNodesInRowsCache(row);
 
       var formatterResult, d = getDataItem(row);
-    
+
       for (var columnIdx in cacheEntry.cellNodesByColumnIdx) {
         if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(columnIdx)) {
           continue;
@@ -2516,7 +2508,7 @@ if (typeof Slick === "undefined") {
       if (rowsCache[row]) {
         var $cell = $(getCellNode(row, cell));
 
-        function toggleCellClass(times) {
+        var toggleCellClass = function(times) {
           if (!times) {
             return;
           }
@@ -2683,7 +2675,7 @@ if (typeof Slick === "undefined") {
       if (e.isImmediatePropagationStopped()) {
         return;
       }
-      
+
       // this optimisation causes trouble - MLeibman #329
       //if ((activeCell != cell.cell || activeRow != cell.row) && canCellBeActive(cell.row, cell.cell)) {
       if (canCellBeActive(cell.row, cell.cell)) {
@@ -2921,7 +2913,7 @@ if (typeof Slick === "undefined") {
       } else {
         activeRow = activeCell = null;
       }
-    
+
       // this optimisation causes trouble - MLeibman #329
       //if (activeCellChanged) {
       if (!suppressActiveCellChangedEvent) { trigger(self.onActiveCellChanged, getActiveCell()); }
@@ -2981,7 +2973,7 @@ if (typeof Slick === "undefined") {
           invalidatePostProcessingResults(activeRow);
         }
       }
-      
+
       // if there previously was text selected on a page (such as selected text in the edit cell just removed),
       // IE can't set focus to anything else correctly
       if (navigator.userAgent.toLowerCase().match(/msie/)) {
@@ -3861,4 +3853,7 @@ if (typeof Slick === "undefined") {
 
     init();
   }
-}(jQuery));
+
+  module.exports = {
+    Grid: SlickGrid
+  };

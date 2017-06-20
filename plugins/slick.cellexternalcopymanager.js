@@ -1,21 +1,15 @@
-(function ($) {
-  // register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "CellExternalCopyManager": CellExternalCopyManager
-    }
-  });
-
+  "use strict";
+  var Slick = require("../slick.core");
 
   function CellExternalCopyManager(options) {
     /*
       This manager enables users to copy/paste data from/to an external Spreadsheet application
       such as MS-Excel® or OpenOffice-Spreadsheet.
-      
+
       Since it is not possible to access directly the clipboard in javascript, the plugin uses
       a trick to do it's job. After detecting the keystroke, we dynamically create a textarea
-      where the browser copies/pastes the serialized data. 
-      
+      where the browser copies/pastes the serialized data.
+
       options:
         copiedCellStyle : sets the css className used for copied cells. default : "copied"
         copiedCellStyleLayerKey : sets the layer key for setting css values of copied cells. default : "copy-manager"
@@ -39,7 +33,7 @@
     var _bodyElement = _options.bodyElement || document.body;
     var _onCopyInit = _options.onCopyInit || null;
     var _onCopySuccess = _options.onCopySuccess || null;
-    
+
     var keyCodes = {
       'C': 67,
       'V': 86,
@@ -50,7 +44,7 @@
     function init(grid) {
       _grid = grid;
       _grid.onKeyDown.subscribe(handleKeyDown);
-      
+
       // we need a cell selection model
       var cellSelectionModel = grid.getSelectionModel();
       if (!cellSelectionModel){
@@ -66,7 +60,7 @@
     function destroy() {
       _grid.onKeyDown.unsubscribe(handleKeyDown);
     }
-    
+
     function getDataItemValueForColumn(item, columnDef) {
       if (_options.dataItemColumnValueExtractor) {
         var dataItemColumnValueExtractorValue = _options.dataItemColumnValueExtractor(item, columnDef);
@@ -96,7 +90,7 @@
 
       return retVal;
     }
-    
+
     function setDataItemValueForColumn(item, columnDef, value) {
       if (_options.dataItemColumnValueSetter) {
         return _options.dataItemColumnValueSetter(item, columnDef, value);
@@ -116,8 +110,8 @@
         editor.destroy();
       }
     }
-    
-    
+
+
     function _createTextBox(innerText){
       var ta = document.createElement('textarea');
       ta.style.position = 'absolute';
@@ -126,20 +120,20 @@
       ta.value = innerText;
       _bodyElement.appendChild(ta);
       ta.select();
-      
+
       return ta;
     }
-    
+
     function _decodeTabularData(_grid, ta){
       var columns = _grid.getColumns();
       var clipText = ta.value;
       var clipRows = clipText.split(/[\n\f\r]/);
       // trim trailing CR if present
       if (clipRows[clipRows.length - 1]=="") { clipRows.pop(); }
-      
+
       var clippedRange = [];
       var j = 0;
-      
+
       _bodyElement.removeChild(ta);
       for (var i=0; i<clipRows.length; i++) {
         if (clipRows[i]!="")
@@ -152,7 +146,7 @@
       var selectedRange = ranges && ranges.length ? ranges[0] : null;   // pick only one selection
       var activeRow = null;
       var activeCell = null;
-      
+
       if (selectedRange){
         activeRow = selectedRange.fromRow;
         activeCell = selectedRange.fromCell;
@@ -163,7 +157,7 @@
         // we don't know where to paste
         return;
       }
-      
+
       var oneCellToMultiple = false;
       var destH = clippedRange.length;
       var destW = clippedRange.length ? clippedRange[0].length : 0;
@@ -211,7 +205,7 @@
         maxDestX: _grid.getColumns().length,
         h: 0,
         w: 0,
-          
+
         execute: function() {
           this.h=0;
           for (var y = 0; y < this.destH; y++){
@@ -222,7 +216,7 @@
               this.w++;
               var desty = activeRow + y;
               var destx = activeCell + x;
-              
+
               if (desty < this.maxDestY && destx < this.maxDestX ) {
                 var nd = _grid.getCellNode(desty, destx);
                 var dt = _grid.getDataItem(desty);
@@ -242,7 +236,7 @@
               }
             }
           }
-          
+
           var bRange = {
             'fromCell': activeCell,
             'fromRow': activeRow,
@@ -260,7 +254,7 @@
             for (var x = 0; x < this.destW; x++){
               var desty = activeRow + y;
               var destx = activeCell + x;
-              
+
               if (desty < this.maxDestY && destx < this.maxDestX ) {
                 var nd = _grid.getCellNode(desty, destx);
                 var dt = _grid.getDataItem(desty);
@@ -278,7 +272,7 @@
               }
             }
           }
-          
+
           var bRange = {
             'fromCell': activeCell,
             'fromRow': activeRow,
@@ -289,8 +283,8 @@
           this.markCopySelection([bRange]);
           _grid.getSelectionModel().setSelectedRanges([bRange]);
           this.cellExternalCopyManager.onPasteCells.notify({ranges: [bRange]});
-          
-          if(addRows > 1){            
+
+          if(addRows > 1){
             var d = _grid.getData();
             for(; addRows > 1; addRows--)
               d.splice(d.length - 1, 1);
@@ -307,8 +301,8 @@
         clipCommand.execute();
       }
     }
-    
-    
+
+
     function handleKeyDown(e, args) {
       var ranges;
       if (!_grid.getEditorLock().isActive() || _grid.getOptions().autoEdit) {
@@ -330,7 +324,7 @@
             _copiedRanges = ranges;
             markCopySelection(ranges);
             _self.onCopyCells.notify({ranges: ranges});
-            
+
             var columns = _grid.getColumns();
             var clipText = "";
 
@@ -340,7 +334,7 @@
                 for (var i=range.fromRow; i< range.toRow+1 ; i++){
                     var clipTextCells = [];
                     var dt = _grid.getDataItem(i);
-                    
+
                     if (clipTextRows == "" && _options.includeHeaderWhenCopying) {
                         var clipTextHeaders = [];
                         for (var j = range.fromCell; j < range.toCell + 1 ; j++) {
@@ -357,7 +351,7 @@
                 }
                 clipText += clipTextRows.join("\r\n") + "\r\n";
             }
-            
+
             if(window.clipboardData) {
                 window.clipboardData.setData("Text", clipText);
                 return true;
@@ -368,7 +362,7 @@
                 var ta = _createTextBox(clipText);
 
                 ta.focus();
-                
+
                 setTimeout(function(){
                      _bodyElement.removeChild(ta);
                     // restore focus
@@ -401,11 +395,11 @@
           || (e.which === keyCodes.INSERT && e.shiftKey && !e.ctrlKey)
          )) {    // CTRL+V or Shift+INS
             var ta = _createTextBox('');
-            
+
             setTimeout(function(){
                 _decodeTabularData(_grid, ta);
             }, 100);
-            
+
             return false;
         }
       }
@@ -413,7 +407,7 @@
 
     function markCopySelection(ranges) {
       clearCopySelection();
-      
+
       var columns = _grid.getColumns();
       var hash = {};
       for (var i = 0; i < ranges.length; i++) {
@@ -440,10 +434,13 @@
       "destroy": destroy,
       "clearCopySelection": clearCopySelection,
       "handleKeyDown":handleKeyDown,
-      
+
       "onCopyCells": new Slick.Event(),
       "onCopyCancelled": new Slick.Event(),
       "onPasteCells": new Slick.Event()
     });
   }
-})(jQuery);
+
+  module.exports = {
+      "CellExternalCopyManager": CellExternalCopyManager
+  };

@@ -1,18 +1,5 @@
-(function ($) {
-  $.extend(true, window, {
-    Slick: {
-      Data: {
-        DataView: DataView,
-        Aggregators: {
-          Avg: AvgAggregator,
-          Min: MinAggregator,
-          Max: MaxAggregator,
-          Sum: SumAggregator
-        }
-      }
-    }
-  });
-
+  "use strict";
+  var Slick = require("./slick.core");
 
   /***
    * A sample Model implementation.
@@ -218,7 +205,7 @@
     function getFilter(){
       return filter;
     }
-    
+
     function setFilter(filterFn) {
       filter = filterFn;
       if (options.inlineFilters) {
@@ -410,7 +397,7 @@
       }
       return low;
     }
-      
+
     function addItem(item) {
       items.push(item);
       updateIdxById(items.length - 1);
@@ -581,7 +568,7 @@
           group = groups[i];
           group.groups = extractGroups(group.rows, group);
         }
-      }      
+      }
 
       groups.sort(groupingInfos[level].comparer);
 
@@ -631,7 +618,7 @@
       level = level || 0;
       var gi = groupingInfos[level];
       var groupCollapsed = gi.collapsed;
-      var toggledGroups = toggledGroupsByLevel[level];      
+      var toggledGroups = toggledGroupsByLevel[level];
       var idx = groups.length, g;
       while (idx--) {
         g = groups[idx];
@@ -653,7 +640,7 @@
         g.collapsed = groupCollapsed ^ toggledGroups[g.groupingKey];
         g.title = gi.formatter ? gi.formatter(g) : g.value;
       }
-    } 
+    }
 
     function flattenGroupedRows(groups, level) {
       level = level || 0;
@@ -984,7 +971,7 @@
           inHandler = true;
           var selectedRows = self.mapIdsToRows(selectedRowIds);
           if (!preserveHidden) {
-            setSelectedRowIds(self.mapRowsToIds(selectedRows));       
+            setSelectedRowIds(self.mapRowsToIds(selectedRows));
           }
           grid.setSelectedRows(selectedRows);
           inHandler = false;
@@ -1051,7 +1038,7 @@
         } else {
           grid.onCellCssStylesChanged.unsubscribe(styleChanged);
           self.onRowsChanged.unsubscribe(update);
-          self.onRowCountChanged.unsubscribe(update);          
+          self.onRowCountChanged.unsubscribe(update);
         }
       });
 
@@ -1216,4 +1203,12 @@
   // TODO:  add more built-in aggregators
   // TODO:  merge common aggregators in one to prevent needles iterating
 
-})(jQuery);
+  module.exports = {
+    DataView: DataView,
+    Aggregators: {
+      Avg: AvgAggregator,
+      Min: MinAggregator,
+      Max: MaxAggregator,
+      Sum: SumAggregator
+    }
+  };

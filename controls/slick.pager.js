@@ -1,4 +1,6 @@
-(function ($) {
+  "use strict";
+  var Slick = require("../slick.core");
+
   function SlickGridPager(dataView, grid, $container) {
     var $status;
 
@@ -142,6 +144,6 @@
     init();
   }
 
-  // Slick.Controls.Pager
-  $.extend(true, window, { Slick:{ Controls:{ Pager:SlickGridPager }}});
-})(jQuery);
+  module.exports = {
+    "Pager": SlickGridPager
+  };

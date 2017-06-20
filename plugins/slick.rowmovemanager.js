@@ -1,10 +1,5 @@
-(function ($) {
-  // register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "RowMoveManager": RowMoveManager
-    }
-  });
+  "use strict";
+  var Slick = require("../slick.core");
 
   function RowMoveManager(options) {
     var _grid;
@@ -135,4 +130,7 @@
       "destroy": destroy
     });
   }
-})(jQuery);
+
+  module.exports = {
+      "RowMoveManager": RowMoveManager
+  };

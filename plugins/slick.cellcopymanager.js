@@ -1,11 +1,5 @@
-(function ($) {
-  // register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "CellCopyManager": CellCopyManager
-    }
-  });
-
+  "use strict";
+  var Slick = require("../slick.core");
 
   function CellCopyManager() {
     var _grid;
@@ -85,4 +79,7 @@
       "onPasteCells": new Slick.Event()
     });
   }
-})(jQuery);
+
+  module.exports = {
+      "CellCopyManager": CellCopyManager
+  };

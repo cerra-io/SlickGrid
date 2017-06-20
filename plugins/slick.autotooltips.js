@@ -1,10 +1,5 @@
-(function ($) {
-  // Register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "AutoTooltips": AutoTooltips
-    }
-  });
+  "use strict";
+  var Slick = require("../slick.core");
 
   /**
    * AutoTooltips plugin to show/hide tooltips when columns are too narrow to fit content.
@@ -21,7 +16,7 @@
       enableForHeaderCells: false,
       maxToolTipLength: null
     };
-    
+
     /**
      * Initialize plugin.
      */
@@ -31,7 +26,7 @@
       if (options.enableForCells) _grid.onMouseEnter.subscribe(handleMouseEnter);
       if (options.enableForHeaderCells) _grid.onHeaderMouseEnter.subscribe(handleHeaderMouseEnter);
     }
-    
+
     /**
      * Destroy plugin.
      */
@@ -39,7 +34,7 @@
       if (options.enableForCells) _grid.onMouseEnter.unsubscribe(handleMouseEnter);
       if (options.enableForHeaderCells) _grid.onHeaderMouseEnter.unsubscribe(handleHeaderMouseEnter);
     }
-    
+
     /**
      * Handle mouse entering grid cell to add/remove tooltip.
      * @param {jQuery.Event} e - The event
@@ -60,7 +55,7 @@
         $node.attr("title", text);
       }
     }
-    
+
     /**
      * Handle mouse entering header cell to add/remove tooltip.
      * @param {jQuery.Event} e     - The event
@@ -73,11 +68,14 @@
         $node.attr("title", ($node.innerWidth() < $node[0].scrollWidth) ? column.name : "");
       }
     }
-    
+
     // Public API
     $.extend(this, {
       "init": init,
       "destroy": destroy
     });
   }
-})(jQuery);
+
+  module.exports = {
+      "AutoTooltips": AutoTooltips
+  };

@@ -1,4 +1,6 @@
-(function ($) {
+  "use strict";
+  var Slick = require("../slick.core");
+
   function SlickColumnPicker(columns, grid, options) {
     var $menu;
     var columnCheckboxes;
@@ -148,6 +150,6 @@
     };
   }
 
-  // Slick.Controls.ColumnPicker
-  $.extend(true, window, { Slick:{ Controls:{ ColumnPicker:SlickColumnPicker }}});
-})(jQuery);
+  module.exports = {
+    "ColumnPicker": SlickColumnPicker
+  };

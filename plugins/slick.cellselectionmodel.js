@@ -1,10 +1,5 @@
-(function ($) {
-  // register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "CellSelectionModel": CellSelectionModel
-    }
-  });
+  "use strict";
+  var Slick = require("../slick.core");
 
   function CellSelectionModel(options) {
     var _grid;
@@ -13,7 +8,7 @@
     var _self = this;
     var _selector;
 
-    if (typeof options === "undefined" || typeof options.cellRangeSelector === "undefined") {    
+    if (typeof options === "undefined" || typeof options.cellRangeSelector === "undefined") {
       _selector = new Slick.CellRangeSelector({
         "selectionCss": {
           "border": "2px solid black"
@@ -109,7 +104,7 @@
         if (!ranges.length)
           ranges.push(new Slick.Range(active.row, active.cell));
 
-        // keyboard can work with last range only          
+        // keyboard can work with last range only
         last = ranges.pop();
 
         // can't handle selection out of active cell
@@ -132,7 +127,7 @@
           dRow += dirRow;
         }
 
-        // define new selection range 
+        // define new selection range
         var new_last = new Slick.Range(active.row, active.cell, active.row + dirRow * dRow, active.cell + dirCell * dCell);
         if (removeInvalidRanges([new_last]).length) {
           ranges.push(new_last);
@@ -161,4 +156,7 @@
       "onSelectedRangesChanged": new Slick.Event()
     });
   }
-})(jQuery);
+
+  module.exports = {
+      "CellSelectionModel": CellSelectionModel
+  };

@@ -1,3 +1,6 @@
+  "use strict";
+  var Slick = require("../slick.core");
+
 /**
  *
  * Draggable Grouping contributed by:  Muthukumar Selvarasu
@@ -7,14 +10,6 @@
  * NOTES:
  *     This plugin provides the Draggable Grouping feature
  */
-
-(function ($) {
-  // Register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "DraggableGrouping": DraggableGrouping
-    }
-  });
 
   /**
    * DraggableGrouping plugin to show/hide tooltips when columns are too narrow to fit content.
@@ -33,7 +28,7 @@
     var _self = this;
     var _defaults = {
     };
-    
+
     /**
      * Initialize plugin.
      */
@@ -43,20 +38,20 @@
       _gridUid = _grid.getUID();
       _gridColumns =  _grid.getColumns();
       _dataView = _grid.getData();
-      
+
       dropbox = $(_grid.getPreHeaderPanel());
       dropbox.html("<div class='slick-placeholder'>Drop a column header here to group by the column</div>");
 
-      dropboxPlaceholder = dropbox.find(".slick-placeholder");      
+      dropboxPlaceholder = dropbox.find(".slick-placeholder");
       setupColumnDropbox();
     }
-    
+
     /**
      * Destroy plugin.
      */
     function destroy() {
     }
-    
+
 
     function setColumns(col) {
       _gridColumns = col;
@@ -196,7 +191,7 @@
       collapseAllGroups();
       */
     }
-    
+
     // Public API
     $.extend(this, {
       "init": init,
@@ -204,4 +199,7 @@
       "clearDroppedGroups": clearDroppedGroups
     });
   }
-})(jQuery);
+
+  module.exports = {
+      "DraggableGrouping": DraggableGrouping
+  };

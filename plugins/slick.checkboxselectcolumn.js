@@ -1,11 +1,5 @@
-(function ($) {
-  // register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "CheckboxSelectColumn": CheckboxSelectColumn
-    }
-  });
-
+  "use strict";
+  var Slick = require("../slick.core");
 
   function CheckboxSelectColumn(options) {
     var _grid;
@@ -99,7 +93,7 @@
 
     function selectRows(rowArray) {
       var i, l=rowArray.length, addRows = [];
-      for(i=0; i<l; i++) { 
+      for(i=0; i<l; i++) {
         if (!_selectedRowsLookup[rowArray[i]]) {
           addRows[addRows.length] = rowArray[i];
         }
@@ -109,7 +103,7 @@
 
     function deSelectRows(rowArray) {
       var i, l=rowArray.length, removeRows = [];
-      for(i=0; i<l; i++) { 
+      for(i=0; i<l; i++) {
         if (_selectedRowsLookup[rowArray[i]]) {
           removeRows[removeRows.length] = rowArray[i];
         }
@@ -173,4 +167,7 @@
       "getColumnDefinition": getColumnDefinition
     });
   }
-})(jQuery);
+
+  module.exports = {
+      "CheckboxSelectColumn": CheckboxSelectColumn
+  };

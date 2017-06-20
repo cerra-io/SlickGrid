@@ -1,25 +1,11 @@
+  "use strict";
+  var Slick = require("./slick.core");
+
 /***
  * Contains basic SlickGrid editors.
  * @module Editors
  * @namespace Slick
  */
-
-(function ($) {
-  // register namespace
-  $.extend(true, window, {
-    "Slick": {
-      "Editors": {
-        "Text": TextEditor,
-        "Integer": IntegerEditor,
-        "Float": FloatEditor,
-        "Date": DateEditor,
-        "YesNoSelect": YesNoSelectEditor,
-        "Checkbox": CheckboxEditor,
-        "PercentComplete": PercentCompleteEditor,
-        "LongText": LongTextEditor
-      }
-    }
-  });
 
   function TextEditor(args) {
     var $input;
@@ -631,4 +617,16 @@
 
     this.init();
   }
-})(jQuery);
+
+  module.exports = {
+    Editors: {
+      Text: TextEditor,
+      Integer: IntegerEditor,
+      Float: FloatEditor,
+      Date: DateEditor,
+      YesNoSelect: YesNoSelectEditor,
+      Checkbox: CheckboxEditor,
+      PercentComplete: PercentCompleteEditor,
+      LongText: LongTextEditor
+    }
+  };
