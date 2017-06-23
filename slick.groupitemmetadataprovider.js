@@ -1,4 +1,5 @@
   "use strict";
+  var $ = require("./slick.jquery");
   var Slick = require("./slick.core");
 
   /***

@@ -18,6 +18,7 @@
  *     and do proper cleanup.
  */
 
+  var $ = require("./slick.jquery");
   var Slick = require("./slick.core");
 
   // shared across all grids on the page
@@ -37,11 +38,11 @@
    * @param {Object}            options     Grid options.
    **/
   function SlickGrid(container, data, columns, options) {
-    if (!jQuery.fn.drag) {
+    if (!$.fn.drag) {
       require('./lib/jquery.event.drag-2.3.0');
     }
 
-    if (!jQuery.fn.drop) {
+    if (!$.fn.drop) {
       require('./lib/jquery.event.drop-2.3.0');
     }
 
@@ -205,7 +206,7 @@
     // Initialization
 
     function init() {
-      if (container instanceof jQuery) {
+      if (container instanceof $) {
         $container = container;
       } else {
         $container = $(container);
