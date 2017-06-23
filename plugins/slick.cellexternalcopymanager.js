@@ -1,5 +1,6 @@
   "use strict";
   var Slick = require("../slick.core");
+  var keyCodes = Slick.keyCode;
 
   function CellExternalCopyManager(options) {
     /*
@@ -33,13 +34,6 @@
     var _bodyElement = _options.bodyElement || document.body;
     var _onCopyInit = _options.onCopyInit || null;
     var _onCopySuccess = _options.onCopySuccess || null;
-
-    var keyCodes = {
-      'C': 67,
-      'V': 86,
-      'ESC': 27,
-      'INSERT': 45
-    };
 
     function init(grid) {
       _grid = grid;

@@ -16,7 +16,7 @@
       $input = $("<INPUT type=text class='editor-text' />")
           .appendTo(args.container)
           .on("keydown.nav", function (e) {
-            if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+            if (e.keyCode === Slick.keyCode.LEFT || e.keyCode === Slick.keyCode.RIGHT) {
               e.stopImmediatePropagation();
             }
           })
@@ -85,7 +85,7 @@
       $input = $("<INPUT type=text class='editor-text' />");
 
       $input.on("keydown.nav", function (e) {
-        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+        if (e.keyCode === Slick.keyCode.LEFT || e.keyCode === Slick.keyCode.RIGHT) {
           e.stopImmediatePropagation();
         }
       });
@@ -154,7 +154,7 @@
       $input = $("<INPUT type=text class='editor-text' />");
 
       $input.on("keydown.nav", function (e) {
-        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+        if (e.keyCode === Slick.keyCode.LEFT || e.keyCode === Slick.keyCode.RIGHT) {
           e.stopImmediatePropagation();
         }
       });
@@ -539,15 +539,15 @@
     };
 
     this.handleKeyDown = function (e) {
-      if (e.which == $.ui.keyCode.ENTER && e.ctrlKey) {
+      if (e.which == Slick.keyCode.ENTER && e.ctrlKey) {
         scope.save();
-      } else if (e.which == $.ui.keyCode.ESCAPE) {
+      } else if (e.which == Slick.keyCode.ESCAPE) {
         e.preventDefault();
         scope.cancel();
-      } else if (e.which == $.ui.keyCode.TAB && e.shiftKey) {
+      } else if (e.which == Slick.keyCode.TAB && e.shiftKey) {
         e.preventDefault();
         args.grid.navigatePrev();
-      } else if (e.which == $.ui.keyCode.TAB) {
+      } else if (e.which == Slick.keyCode.TAB) {
         e.preventDefault();
         args.grid.navigateNext();
       }
