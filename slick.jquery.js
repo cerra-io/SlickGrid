@@ -1,2 +1,1 @@
-var $ = require("jquery");
-module.exports = $;
+module.exports = (typeof $ !== "undefined") ? $ : require("jquery");
