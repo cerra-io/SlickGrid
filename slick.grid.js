@@ -465,8 +465,8 @@
     function measureScrollbar() {
       var $c = $("<div style='position:absolute; top:-10000px; left:-10000px; width:100px; height:100px; overflow:scroll;'></div>").appendTo("body");
       var dim = {
-        width: $c.width() - $c[0].clientWidth,
-        height: $c.height() - $c[0].clientHeight
+        width: $c[0].offsetWidth - $c[0].clientWidth,
+        height: $c[0].offsetHeight - $c[0].clientHeight
       };
       $c.remove();
       return dim;
