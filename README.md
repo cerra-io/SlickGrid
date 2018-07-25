@@ -1,3 +1,5 @@
+Forked to fix the measureScrollbar() function which does not work in newer versions of jQuery (at least 3.2.1 or later).
+
 ## This is the 6pac SlickGrid repo
 
 This is the acknowledged most active non-customised fork of SlickGrid.
